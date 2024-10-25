@@ -56,3 +56,4 @@ jobs:
         with:
           artifacts: "assets/*/*.exe"
           generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
