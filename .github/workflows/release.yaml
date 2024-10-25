@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - main
-      
+
 permissions:
   contents: write
 
@@ -57,6 +57,6 @@ jobs:
       - name: Release executable
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "assets/*/*.exe"
+          artifacts: "assets/*.exe"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
