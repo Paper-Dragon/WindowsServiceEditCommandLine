@@ -31,9 +31,9 @@ jobs:
           pyinstaller app.spec
 
       - name: Upload executable artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: main_executable
+          name: windows-svc-edit
           path: dist/svc-edit.exe
 
 
@@ -46,7 +46,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: main_executable
+          name: windows-svc-edit
           path: ./assets
       
       - name: Release executable
