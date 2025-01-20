@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - "v*.*.*"
+      - "v*.*.*.*"
   pull_request:
     branches:
       - main
@@ -31,8 +31,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install PyInstaller and build executable
+      - name: Set version and build
+        shell: pwsh
         run: |
+          # 从tag中提取版本号
+          if ($env:GITHUB_REF -like "refs/tags/v*") {
+            $version = $env:GITHUB_REF -replace "refs/tags/v", ""
+            $versionArray = $version -split "\."
+            
+            # 更新file_version_info.txt中的版本号
+            (Get-Content file_version_info.txt) -replace "filevers=\(0, 0, 0, 2\)", "filevers=($($versionArray[0]), $($versionArray[1]), $($versionArray[2]), $($versionArray[3]))" | Set-Content file_version_info.txt
+            (Get-Content file_version_info.txt) -replace "prodvers=\(0, 0, 0, 2\)", "prodvers=($($versionArray[0]), $($versionArray[1]), $($versionArray[2]), $($versionArray[3]))" | Set-Content file_version_info.txt
+            (Get-Content file_version_info.txt) -replace "FileVersion', u'0, 0, 0, 2'", "FileVersion', u'$($versionArray[0]), $($versionArray[1]), $($versionArray[2]), $($versionArray[3])'" | Set-Content file_version_info.txt
+            (Get-Content file_version_info.txt) -replace "ProductVersion', u'0.0.0.2'", "ProductVersion', u'$version'" | Set-Content file_version_info.txt
+          }
+          
+          # 构建可执行文件
           pyinstaller app.spec
 
       - name: Upload executable artifact
@@ -40,7 +54,6 @@ jobs:
         with:
           name: windows-svc-edit
           path: dist/svc-edit.exe
-
 
   release:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')

@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-
 a = Analysis(
     ['main.py'],
     pathex=[],
@@ -12,7 +11,7 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
-    optimize=0,
+    optimize=1,
 )
 pyz = PYZ(a.pure)
 
@@ -24,7 +23,7 @@ exe = EXE(
     [],
     name='svc-edit',
     debug=False,
-    bootloader_ignore_signals=False,
+    bootloader_ignore_signals=True,
     strip=False,
     upx=True,
     upx_exclude=[],
@@ -35,4 +34,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['app.ico'],
+    version='file_version_info.txt',
 )
